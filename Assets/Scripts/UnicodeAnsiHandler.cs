@@ -46,14 +46,15 @@ namespace Language
 7 ć
 8 Ĉ
 9 ĉ
-A Ċ
-B ċ
-C Č
-D č
-E Ď
-F ď
-G Đ
-H đ
+@ Ċ
+A ċ
+B Č
+C č
+D Ď
+E ď
+F Đ
+G đ
+H Ē
 I ē
 J Ĕ
 K ĕ
@@ -99,7 +100,6 @@ x ļ
 y Ľ
 z ľ
 ";
-
             var fileContents = @"অ A
 আ Av
 ই B
@@ -185,6 +185,7 @@ $ ৳
 [ [
 ] ]
 ' '
+, ,
 ";
 
             var left_kars = @"
@@ -501,10 +502,16 @@ $ ৳
                         }
                     }
                 }
-                else
+                else if(unicode_ansi_dict.ContainsKey(unicode_word[_i].ToString()))
                 {
                     last_char = unicode_ansi_dict[unicode_word[_i].ToString()];
                     ascii_word += last_char;
+                }
+                else
+                {
+                    // new line
+                    if ((int)unicode_word[_i] == 10)
+                        ascii_word += '\n';
                 }
             }
             return ascii_word;
