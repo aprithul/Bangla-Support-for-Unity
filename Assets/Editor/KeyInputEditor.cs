@@ -7,6 +7,7 @@ using com.omicronlab.avro;
 [CustomEditor(typeof(KeyInput))]
 public class KeyInputEditor : Editor
 {
+
     PhoneticParser avro = PhoneticParser.getInstance();
     static string[] hotKeys = new string[] {
 												 "a", "b", "c", "d", "e","f",
@@ -21,7 +22,8 @@ public class KeyInputEditor : Editor
     private void OnEnable()
     {
         avro.setLoader(new PhoneticXmlLoader());
-        TextManager.current_text = "";
+        //TextManager.current_text = "";
+        //Debug.Log(targ textManager.current_text);
     }
 
     private void OnDisable()
@@ -39,14 +41,15 @@ public class KeyInputEditor : Editor
 
 		PreventHotKeys(hotKeys);
 
+        var lastText = _target.textManager.current_text;
 
         if (Event.current.type == EventType.keyUp && Event.current.keyCode == KeyCode.Backspace)
         {
-            TextManager.remove_from_end();
+            _target.textManager.remove_from_end();
         }
         else if (Event.current.type == EventType.keyUp && Event.current.keyCode == KeyCode.Space)
         {
-            TextManager.append(" ");
+            _target.textManager.append(" ");
         }
         else if (Event.current.control && Event.current.alt)
         {
@@ -54,7 +57,7 @@ public class KeyInputEditor : Editor
             {
                 if (Event.current.keyCode == KeyCode.F7)
                 {
-                    TextManager.append("Ǝ");
+                    _target.textManager.append("Ǝ");
                 }
             }
         }
@@ -62,31 +65,33 @@ public class KeyInputEditor : Editor
         {
             if (Event.current.keyCode == KeyCode.None)
             {
-                TextManager.append(Event.current.character.ToString());
+                _target.textManager.append(Event.current.character.ToString());
             }
         }
 
-        string[] input_text_splitted = TextManager.current_text.Split('Ǝ');
-        string unicode_text = "";
-        bool odd = true;
-        foreach (string s in input_text_splitted)
+        if (lastText != _target.textManager.current_text)
         {
-            if (odd)
+            string[] input_text_splitted = _target.textManager.current_text.Split('Ǝ');
+            string unicode_text = "";
+            bool odd = true;
+            foreach (string s in input_text_splitted)
             {
-                unicode_text += avro.parse(s);
-                odd = false;
-            }
-            else
-            {
-                unicode_text += s;
-                odd = true;
-            }
+                if (odd)
+                {
+                    unicode_text += avro.parse(s);
+                    odd = false;
+                }
+                else
+                {
+                    unicode_text += s;
+                    odd = true;
+                }
 
+            }
+            string ascii = _target.unicode_ansi_handler.get_ascii_word(unicode_text);
+            _target.text_field.text = ascii;
+            EditorUtility.SetDirty(_target.text_field);
         }
-        string ascii = _target.unicode_ansi_handler.get_ascii_word(unicode_text);
-        _target.text_field.text = ascii;
-        EditorUtility.SetDirty(_target.text_field);
-
     }
 
     public static void PreventHotKeys(string[] keys)

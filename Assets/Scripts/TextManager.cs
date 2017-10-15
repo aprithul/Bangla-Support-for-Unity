@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TextManager {
+[System.Serializable]
+public class TextManager {
+    
+    public string current_text="";
+    public string last_word ="";
 
-    public static string current_text;
-    public static string last_word ="";
-    private static string current_word ="";
-
-    public static void append(string character)
+    public void append(string character)
     {
         current_text += character;
-        if (character == " ")
-        {
-            last_word = current_word;
-            current_word = "";
-        }
-        else
-            current_word += character;
     }
 
-    public static void remove_from_end()
+    public void remove_from_end()
     {
         if(current_text.Length>0)
             current_text = current_text.Remove(current_text.Length - 1);
