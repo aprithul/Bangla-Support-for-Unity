@@ -28,4 +28,4 @@ A: Yes and No. It only works with ANSII fonts as stated earlier. There are only 
 Q: Why didn't you put the language rules/unicode to ansii dictionaries in a text/xml/json/whatever file?
 A: It's just faster for me to work with. Maybe I will copy them over at a later stage. Not feeling the need at the moment really.
 
-[ It is a working progress so please have patience :) ]
+[ It is a work in progress so please have patience :) ]
